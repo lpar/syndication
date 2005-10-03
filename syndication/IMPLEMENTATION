@@ -1,0 +1,33 @@
+# = Syndication 0.4 
+#
+# As discussed in the README, this is really my fourth attempt at writing
+# RSS parsing code. For the record, I thought I'd list the approaches I
+# tried and abandoned. In a way, that's more interesting than the one I
+# picked...
+#
+# First I used hashes for storage and just looked for matching tags.
+# That approach works, kinda, but it doesn't really understand nested 
+# elements at all. As a result, it becomes really hard to deal with Atom
+# feeds, where an <email> element could belong to one of a number of kinds
+# of person. Plus, I wanted a real object-based approach which would be
+# amenable to RDoc documentation.
+#
+# Next I wrote a classic stack-based parser, with a container stack and a 
+# text buffer stack. That worked well for RSS; I got it parsing every RSS
+# variant, and even went as far as a test suite.  However, as I tried 
+# extending it to deal with Atom, I realized that the parser code was 
+# becoming hard to follow, as the state machine gained more and more 
+# special cases.
+#
+# For a third iteration, I tried to generalize the knowledge represented by the
+# state machine, by placing it in the context stack. That is, I would have a
+# smart stack that knew which XML elements could go inside other elements.
+# Actually, there would have been four context stacks, for containers,
+# attributes, tags and textual data.
+#
+# That design never made it past the paper stage, because I realized that I
+# could move all the knowledge into the classes used to create the objects of
+# the final parse tree.  With the new model--the one used in this code--the
+# parser really doesn't know anything about Atom or RSS. It just forwards
+# events to a tree of objects, which construct child objects as appropriate to
+# grow the tree and represent the feed.
