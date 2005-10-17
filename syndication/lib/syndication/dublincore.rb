@@ -70,23 +70,25 @@ module Syndication
   end
 
   #:enddoc:
-  # Now we mix in the DublinCore elements to all the Syndication classes that
-  # can contain them. There's probably some clever way to do this via 
-  # reflection, but there _is_ such a thing as being too clever.
-  class Item
-    include DublinCore
-  end
+  module RSS
+    # Now we mix in the DublinCore elements to all the Syndication classes that
+    # can contain them. There's probably some clever way to do this via 
+    # reflection, but there _is_ such a thing as being too clever.
+    class Item
+      include DublinCore
+    end
 
-  class Channel
-    include DublinCore
-  end
+    class Channel
+      include DublinCore
+    end
 
-  class Image
-    include DublinCore
-  end
+    class Image
+      include DublinCore
+    end
 
-  class TextInput
-    include DublinCore
+    class TextInput
+      include DublinCore
+    end
   end
 
 end
