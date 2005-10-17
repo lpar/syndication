@@ -1,0 +1,52 @@
+
+require 'rake/rdoctask'
+require 'rake/packagetask'
+require 'rake/gempackagetask'
+require 'rubygems'
+
+PKG_VERSION = "0.5.0"
+
+desc "Create HTML documentation from RDOC"
+Rake::RDocTask.new do |rd|
+  rd.main = "README"
+  rd.rdoc_files.include("README", "HISTORY", "IMPLEMENTATION", "DEVELOPER",
+                        "lib/**/*.rb", "test/**/*.rb", "examples/**/*.rb")
+end
+
+desc "Make tar distribution"
+Rake::PackageTask.new('syndication', PKG_VERSION) do |t|
+  t.need_tar_bz2 = true
+  t.package_files.include("README", "HISTORY", "IMPLEMENTATION", "DEVELOPER", "lib/**/*.rb", "test/**/*.rb", "examples/**/*.rb", "rakefile", "setup.rb")
+  t.package_dir = "pkg"
+end
+
+spec = Gem::Specification.new do |s|
+  s.name = "syndication"
+  s.version = PKG_VERSION
+  s.author = "mathew"
+  s.email = "meta@pobox.com"
+  s.homepage = "http://www.pobox.com/~meta/"
+  s.platform = Gem::Platform::RUBY
+  s.summary = "A web syndication parser for Atom and RSS with a uniform API"
+  candidates = Dir.glob("{bin,docs,lib,test,examples}/**/*")
+  candidates << "rakefile"
+  s.files = candidates.delete_if do |item|
+    item.include?("CVS") || item.include?("html")
+  end
+  s.require_path = "lib"
+  s.test_files = ["test/atomtest.rb", "test/rsstest.rb", 
+                  "test/tagsouptest.rb"]
+  s.has_rdoc = true
+  s.extra_rdoc_files = ["README", "IMPLEMENTATION", "HISTORY", "DEVELOPER"]
+end
+
+desc "Make RubyGems gem distribution"
+Rake::GemPackageTask.new(spec) do |pkg|
+  pkg.need_zip = true
+  pkg.need_tar = true
+end
+
+task :default do
+  puts "This is a pure Ruby library, no compilation is required."
+  puts "Try rake --tasks"
+end

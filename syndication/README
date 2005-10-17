@@ -1,5 +1,5 @@
 #
-# = Syndication 0.4 
+# = Syndication 0.5 
 #
 # This module provides classes for parsing web syndication feeds in RSS and
 # Atom formats.
@@ -93,7 +93,8 @@
 #
 # - Simple to extend to support your own RSS extensions, uses reflection.
 #
-# - Uses REXML fast stream parsing API for speed.
+# - Uses REXML fast stream parsing API for speed, or built-in TagSoup parser
+#   for broken feeds.
 #
 # - Non-validating, tries to be as forgiving as possible of structural errors.
 #
@@ -108,8 +109,6 @@
 #   to use rss/maker.
 #
 # - Different API, not a drop-in replacement.
-#
-# - No way to choose a different XML parser (yet).
 #
 # - Incomplete support for Atom 0.3 draft. (Anyone still using it?)
 #
@@ -150,11 +149,24 @@
 # For the record, I started work on my library long before simple-rss was
 # announced.
 #
-# = feedtools / feedreader 
+# = feedtools
 #
 # http://rubyforge.org/projects/feedtools/
 #
-# I don't know much about this one.
+# This one solves most of the same problems as Syndication; however the two 
+# were developed in parallel, in ignorance of each other.
+#
+# Feedtools builds in database caching and persistance, and HTTP fetching.
+# Personally, I don't think those belong in a feed parsing library--they
+# are easily implemented using other standard libraries if you want them.
+#
+# Pros:
+# - Lots of test cases.
+#
+# - Used by lots of Rails people.
+#
+# Cons:
+# - Skimpy documentation.
 #
 # == Design philosophy 
 #
@@ -187,12 +199,6 @@
 # - RSS and Atom generation. Create objects, then call Syndication::FeedMaker
 #   to generate XML in various flavors.
 #
-# - More lenient parsing. The limiting factor right now appears to be REXML,
-#   which although a non-validating parser, does require fairly well-formed
-#   XML. (In particular, failure to match tags will cause errors.)  Perhaps
-#   the answer is to find or build a 'tag soup' parser that implements the 
-#   REXML stream parsing API?
-#
 # - Faster date parsing. It turns out that when I asked for parsed dates in
 #   my test code, the profiler showed Date.parse chewing up 25% of the total
 #   CPU time used. A more specific date parser that didn't use heuristics 
@@ -202,7 +208,6 @@
 #
 # == Feedback 
 #
-# This is my first public release of this code, so there are doubtless things
-# I could have done better. Comments, suggestions, etc are welcome; e-mail 
-# <meta@pobox.com>.
+# There are doubtless things I could have done better. Comments, suggestions,
+# etc are welcome; e-mail <meta@pobox.com>.
 #
