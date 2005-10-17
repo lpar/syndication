@@ -174,8 +174,11 @@ module Syndication
     # Parse the text provided. Returns a Syndication::Atom::Feed or
     # Syndication::RSS::Feed object, according to which concrete Parser
     # class is being used.
-    def parse(text)
-      REXML::Document.parse_stream(text, self)
+    # The second argument is optional and determines the parser engine to
+    # use. The default is REXML. To use TagSoup, pass in the value 
+    # Syndication::TagSoup
+    def parse(text, classname = REXML::Document)
+      classname.parse_stream(text, self)
       return @parsetree
     end
 
