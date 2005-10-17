@@ -1,0 +1,6 @@
+# == Changes in 0.5
+#
+# - Fixed problem with syndication/dublincore reported by Ura Takefumi
+#
+# - Added new TagSoup completely-non-validating parser, tests for same,
+#   and option to use it for parsing feeds

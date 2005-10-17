@@ -2,6 +2,8 @@
 #
 # Copyright © mathew <meta@pobox.com> 2005.
 # Licensed under the same terms as Ruby.
+#
+# $Header$
 
 require 'uri'
 require 'rexml/parsers/streamparser'
