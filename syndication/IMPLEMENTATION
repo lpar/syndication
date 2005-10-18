@@ -1,4 +1,26 @@
-# = Syndication 0.4 
+# = Implementation notes
+# == Syndication 0.5
+#
+# For this release, I added a parser called TagSoup. The name is taken from
+# the jargon term used for HTML written without any regard to the rules of
+# HTML structure, i.e. HTML with many common authoring mistakes in.
+#
+# TagSoup is a very small and very dumb parser which implements the stream
+# API of REXML. The test code compares it against REXML for some simple
+# example XML and makes sure it calls the same callbacks in the same order
+# with the same parameters.
+#
+# Note that hacking together your own XML parser is, generally speaking, the
+# wrong thing to do. Using TagSoup as a general replacement for REXML is very
+# definitely the wrong thing to do. Please don't do it. 
+#
+# A real XML parser does all kinds of things that TagSoup doesn't, like pay
+# attention to DTDs, handle quoted special characters in element attributes,
+# handle whitespace in a documented standard way, and so on. The fact that
+# TagSoup is defective in many areas is intentional. It's designed to be
+# used as a last resort, for parsing web syndication feeds which are invalid.
+#
+# == Syndication 0.4 
 #
 # As discussed in the README, this is really my fourth attempt at writing
 # RSS parsing code. For the record, I thought I'd list the approaches I

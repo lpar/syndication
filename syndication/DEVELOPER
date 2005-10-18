@@ -1,3 +1,5 @@
-# == Developer info for syndication project
+# = Developer info for syndication project
 #
-# Release tags are of the format v_0_5 (for 0.5)
+# You only need to know this if actually hacking on the code via RubyForge.
+#
+# Release tags are of the format v_0_5 (for 0.5).
