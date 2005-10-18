@@ -9,14 +9,14 @@ PKG_VERSION = "0.5.0"
 desc "Create HTML documentation from RDOC"
 Rake::RDocTask.new do |rd|
   rd.main = "README"
-  rd.rdoc_files.include("README", "HISTORY", "IMPLEMENTATION", "DEVELOPER",
+  rd.rdoc_files.include("README", "CHANGES", "IMPLEMENTATION", "DEVELOPER",
                         "lib/**/*.rb", "test/**/*.rb", "examples/**/*.rb")
 end
 
 desc "Make tar distribution"
 Rake::PackageTask.new('syndication', PKG_VERSION) do |t|
   t.need_tar_bz2 = true
-  t.package_files.include("README", "HISTORY", "IMPLEMENTATION", "DEVELOPER", "lib/**/*.rb", "test/**/*.rb", "examples/**/*.rb", "rakefile", "setup.rb")
+  t.package_files.include("README", "CHANGES", "IMPLEMENTATION", "DEVELOPER", "lib/**/*.rb", "test/**/*.rb", "examples/**/*.rb", "rakefile", "setup.rb")
   t.package_dir = "pkg"
 end
 
@@ -37,7 +37,7 @@ spec = Gem::Specification.new do |s|
   s.test_files = ["test/atomtest.rb", "test/rsstest.rb", 
                   "test/tagsouptest.rb"]
   s.has_rdoc = true
-  s.extra_rdoc_files = ["README", "IMPLEMENTATION", "HISTORY", "DEVELOPER"]
+  s.extra_rdoc_files = ["README", "IMPLEMENTATION", "CHANGES", "DEVELOPER"]
 end
 
 desc "Make RubyGems gem distribution"
