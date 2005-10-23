@@ -21,7 +21,7 @@ module Syndication
         return @content_encoded
       end
       # CDATA is the easier
-      if @content_encoded.match(/<!\[CDATA\[(.*)\]\]!>/)
+      if @content_encoded.match(/<!\[CDATA\[(.*)\]\]>/)
         return $1
       end
       # OK, must be entity-encoded

@@ -290,6 +290,7 @@ class Tests < Test::Unit::TestCase
     i2 = il.last
     assert_not_nil(i1.content_encoded, "content_encoded nil, shouldn't be")
     assert_not_nil(i2.content_encoded, "content_encoded nil, shouldn't be")
+    assert(i1.content_encoded == 'The enticingly cute <i>enhydra lontris</i>')
     assert(i1.content_decoded == 'The enticingly cute <i>enhydra lontris</i>')
     assert(i2.content_decoded == "There's this language called <strong>Ruby</strong>, you <em>may</em> have heard of it.")
     c = f.channel
