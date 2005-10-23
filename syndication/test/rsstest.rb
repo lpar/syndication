@@ -294,6 +294,8 @@ class Tests < Test::Unit::TestCase
     assert(i1.content_decoded == 'The enticingly cute <i>enhydra lontris</i>')
     assert(i2.content_decoded == "There's this language called <strong>Ruby</strong>, you <em>may</em> have heard of it.")
     c = f.channel
+    assert(c.content_encoded == '<![CDATA[<p><cite>OtterNet</cite> has <em>dozens</em> of pages of information about otters.</p>]]>')
+    assert(c.content_decoded == '<p><cite>OtterNet</cite> has <em>dozens</em> of pages of information about otters.</p>')
     assert_not_nil(c)
     assert_kind_of(Syndication::RSS::Channel, c)
     assert_not_nil(c.title)
