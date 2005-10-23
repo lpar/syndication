@@ -20,11 +20,11 @@ module Syndication
       if !@content_encoded or @content_encoded == ''
         return @content_encoded
       end
-      # CDATA is the easier
-      if @content_encoded.match(/<!\[CDATA\[(.*)\]\]>/)
+      # CDATA is the easier case
+      if @content_encoded.match(/<!\[CDATA\[(.*)\]\]>/m)
         return $1
       end
-      # OK, must be entity-encoded
+      # Decode escaped entities
       x = @content_encoded.gsub(/&lt;/, '<')
       x.gsub!(/&gt;/, '>')
       return x.gsub(/&amp;/, '&')

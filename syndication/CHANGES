@@ -1,6 +1,10 @@
+# == Changes in 0.5.1
+#
+# - Fixes for handling of CDATA-encoded text.
+#
 # == Changes in 0.5
 #
-# - Fixed problem with syndication/dublincore reported by Ura Takefumi
+# - Fixed problem with syndication/dublincore reported by Ura Takefumi.
 #
 # - Added new TagSoup completely-non-validating parser, tests for same,
-#   and option to use it for parsing feeds
+#   and option to use it for parsing feeds.

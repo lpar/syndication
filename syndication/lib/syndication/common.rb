@@ -268,5 +268,15 @@ module Syndication
         @textstack.last << s
       end
     end
+
+    # Supposed to be called when REXML finds a CDATA-encoded piece of text.
+    def cdata(s)
+      # We re-encode, because (a) the API for RSS content module provides both 
+      # encoded and decoded results to the user, and (b) REXML doesn't always
+      # seem to pass CDATA via this callback method.
+      if @textstack.last
+        @textstack.last << "<![CDATA[#{s}]]>"
+      end
+    end
   end
 end
