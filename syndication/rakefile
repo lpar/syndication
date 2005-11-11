@@ -4,7 +4,7 @@ require 'rake/packagetask'
 require 'rake/gempackagetask'
 require 'rubygems'
 
-PKG_VERSION = "0.5.0"
+PKG_VERSION = "0.5.1"
 
 desc "Create HTML documentation from RDOC"
 Rake::RDocTask.new do |rd|

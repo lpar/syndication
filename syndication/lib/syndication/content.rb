@@ -36,6 +36,9 @@ module Syndication
     class Item
       include Content
     end
+    class Channel
+      include Content
+    end
   end
 
 end
