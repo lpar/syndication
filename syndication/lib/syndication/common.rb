@@ -1,9 +1,9 @@
 # The file common.rb contains code common to both Atom and RSS parsing.
 #
-# Copyright © mathew <meta@pobox.com> 2005.
+# Copyright © mathew <meta@pobox.com> 2006.
 # Licensed under the same terms as Ruby.
 #
-# $Header$
+# $Header: /var/cvs/syndication/syndication/lib/syndication/common.rb,v 1.4 2005/10/23 22:51:17 meta Exp $
 
 require 'uri'
 require 'rexml/parsers/streamparser'
@@ -138,7 +138,8 @@ module Syndication
       'http://www.w3.org/1999/02/22-rdf-syntax-ns#' => 'rdf',
       'http://purl.org/rss/1.0/modules/content/' => 'content',
       'http://www.itunes.com/DTDs/Podcast-1.0.dtd' => 'itunes',
-      'http://www.w3.org/1999/xhtml' => 'xhtml'
+      'http://www.w3.org/1999/xhtml' => 'xhtml',
+      'http://schemas.google.com/g/2005' => 'gd'
     }
     
     # Create a new AbstractParser. The optional argument consists of text to

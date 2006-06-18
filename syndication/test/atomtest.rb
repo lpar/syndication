@@ -1,7 +1,7 @@
 # Copyright © mathew <meta@pobox.com> 2005.
 # Licensed under the same terms as Ruby.
 # 
-# $Header$
+# $Header: /var/cvs/syndication/syndication/test/atomtest.rb,v 1.2 2005/10/17 20:06:51 meta Exp $
 
 require 'syndication/atom'
 require 'test/unit'
@@ -13,7 +13,7 @@ module Syndication
 
     # A set of minimal assertions that can be applied to every well-formed parsed
     # feed.
-    def baseline_assertions(feed)
+    def baseline_atom_assertions(feed)
       assert_not_nil(feed, 'Parser returned nil')
       assert_kind_of(Syndication::Atom::Feed, feed)
       assert_not_nil(feed.title, 'Feed#title was nil')
@@ -48,7 +48,7 @@ module Syndication
     </feed>
       EOF
       f = Syndication::Atom::Parser.new.parse(xml)
-      baseline_assertions(f)
+      baseline_atom_assertions(f)
       assert(f.title.txt == 'One good turn usually gets most of the blanket.')
       assert(f.updated.strftime('%F %T') == '2005-08-20 21:14:38')
       assert(f.entries.length == 1, 'Wrong number of entries in feed')
@@ -152,7 +152,7 @@ module Syndication
 </feed>
       EOF
       f = Syndication::Atom::Parser.new.parse(xml)
-      baseline_assertions(f)
+      baseline_atom_assertions(f)
       assert(f.categories.length == 2)
       assert(f.contributors.length == 2)
       assert(f.contributors[0].name == 'Phil Space', "Feed#contributors name didn't match")

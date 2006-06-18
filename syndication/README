@@ -1,4 +1,4 @@
-# = Syndication 0.5 
+# = Syndication 0.6 
 #
 # This module provides classes for parsing web syndication feeds in RSS and
 # Atom formats.
@@ -19,12 +19,12 @@
 #
 # == License
 #
-# Syndication is Copyright 2005 mathew <meta@pobox.com>, and is licensed 
+# Syndication is Copyright 2005-2006 mathew <meta@pobox.com>, and is licensed 
 # under the same terms as Ruby.
 #
 # == Requirements 
 #
-# Built and tested using Ruby 1.8.2. Needs only the standard library.
+# Built and tested using Ruby 1.8.4. Needs only the standard library.
 #
 # == Rationale 
 #
@@ -52,7 +52,7 @@
 # breaking existing code that used the RSS module, I opted for an all-new
 # implementation.
 #
-# This is the result. I'm calling it version 0.4, because it's actually my
+# This is the result. The first release was version 0.4, which was actually my
 # fourth attempt at putting together a clean, simple, universal API for RSS
 # and Atom parsing. (The first three never saw public release.)
 #
@@ -80,8 +80,8 @@
 #
 # Other features:
 #
-# - Optional support for RSS 1.0 Dublin Core, Syndication and Content modules
-#   and Apple iTunes Podcast elements (others to follow).
+# - Optional support for RSS 1.0 Dublin Core, Syndication and Content modules,
+#   Apple iTunes Podcast elements, and Google Calendar.
 #
 # - Content module decodes CDATA-escaped or encoded HTML content for you.
 #
@@ -103,9 +103,9 @@
 # In the interests of balance, here are some key disadvantages over the 
 # standard library RSS support:
 #
-# - No support for _generating_ RSS feeds yet, only for parsing them. If
-#   you're using Rails, you can use RXML; if not, you can of course continue
-#   to use rss/maker.
+# - No support for _generating_ RSS feeds, only for parsing them. If
+#   you're using Rails, you can use RXML; if not, you can use rss/maker.
+#   My feeling is that XML generation isn't a wheel that needs reinventing.
 #
 # - Different API, not a drop-in replacement.
 #
@@ -166,6 +166,8 @@
 #
 # - Knows about many more namespaces.
 #
+# - Can generate feeds.
+#
 # Cons:
 # - Skimpy documentation.
 #
@@ -206,14 +208,18 @@
 # Here are some possible improvements:
 # 
 # - RSS and Atom generation. Create objects, then call Syndication::FeedMaker
-#   to generate XML in various flavors.
+#   to generate XML in various flavors. This probably won't happen until an XML
+#   generator is picked for the Ruby standard library.
 #
 # - Faster date parsing. It turns out that when I asked for parsed dates in
 #   my test code, the profiler showed Date.parse chewing up 25% of the total
-#   CPU time used. A more specific date parser that didn't use heuristics 
-#   to guess format could cut that down drastically. On the other hand,
-#   does it actually matter? Is the date parsing slow enough to be a problem 
-#   for anyone?
+#   CPU time used. A more specific ISO8601 specific date parser could cut 
+#   that down drastically.
+#
+# - Additional Google Data support. I just wanted to be able to display my
+#   upcoming calendar dates, but clearly there is a lot more that could be
+#   implemented. Unfortunately, recurring events don't seem to have a clean
+#   XML representation in Google's data feeds yet.
 #
 # == Feedback 
 #

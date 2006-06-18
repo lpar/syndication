@@ -1,7 +1,5 @@
-# Copyright © mathew <meta@pobox.com> 2005.
+# Copyright © mathew <meta@pobox.com> 2005-2006.
 # Licensed under the same terms as Ruby.
-#
-# $Header$
 
 require 'cgi'
 
@@ -37,6 +35,10 @@ module Syndication
               end
             }
             listener.tag_start(tag, pairs)
+            # Tags with end tag build in, XML style
+            if thing[-2,1] == '/'
+              listener.tag_end(tag)
+            end
           end
         else
           # It's text

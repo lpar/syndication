@@ -1,10 +1,8 @@
 # This module provides classes and methods for parsing RSS web syndication 
 # feeds.
 #
-# Copyright © mathew <meta@pobox.com> 2005.
+# Copyright © mathew <meta@pobox.com> 2005-2006.
 # Licensed under the same terms as Ruby.
-#
-# $Header$
 
 require 'uri'
 require 'rexml/parsers/streamparser'
@@ -20,7 +18,7 @@ module Syndication
     # <category> elements
     def store_category(cat)
       if cat.kind_of?(String)
-        if !@category
+        if !defined? @category
           @category = Array.new
         end
         @category << cat
@@ -189,7 +187,7 @@ module RSS
     # that; we just make the Channel recognize it and store the values.
     def hour=(hr)
       if hr.kind_of?(String)
-        if !@skiphours
+        if !defined? @skiphours
           @skiphours = Array.new
         end
         h = hr.to_i
@@ -203,7 +201,7 @@ module RSS
     # that; we just make the Channel recognize it and store the values.
     def day=(dayname)
       if dayname.kind_of?(String)
-        if !@skipdays
+        if !defined? @skipdays
           @skipdays = Array.new
         end
         @skipdays << dayname
@@ -279,9 +277,15 @@ module RSS
     # The image for the feed, as a Syndication::Image object.
     attr_accessor :image
 
+    def initialize(parent, tag = nil, attrs = nil)
+      # Explicitly initialize to nil to avoid warnings
+      @items = @category = @skiphours = @skipdays = nil
+      super
+    end
+
     # Add an item to the feed.
     def item=(obj)
-      if !@items
+      if (!defined? @items) || (@items == nil)
         @items = Array.new
       end
       @items.push(obj)

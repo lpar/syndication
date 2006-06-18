@@ -1,7 +1,7 @@
 # Copyright © mathew <meta@pobox.com> 2005.
 # Licensed under the same terms as Ruby.
 #
-# $Header$
+# $Header: /var/cvs/syndication/syndication/test/rsstest.rb,v 1.4 2005/10/23 23:00:59 meta Exp $
 
 require 'syndication/rss'
 require 'test/unit'
@@ -16,7 +16,7 @@ class Tests < Test::Unit::TestCase
 
   # A set of minimal assertions that can be applied to every well-formed parsed
   # feed.
-  def baseline_assertions(feed)
+  def baseline_rss_assertions(feed)
     assert_not_nil(feed)
     assert_kind_of(Syndication::RSS::Feed, feed)
     loi = feed.items
@@ -42,7 +42,7 @@ class Tests < Test::Unit::TestCase
     </rss>
     EOF
     f = Syndication::RSS::Parser.new.parse(xml)
-    baseline_assertions(f)
+    baseline_rss_assertions(f)
     assert(f.channel.title == 'I like coffee')
     assert(f.channel.link == 'http://www.coffeegeek.com/')
     assert(f.channel.description == 'Hand over the latte & nobody gets hurt.')
@@ -75,7 +75,7 @@ class Tests < Test::Unit::TestCase
     </rdf:RDF>
     EOF
     f = Syndication::RSS::Parser.new.parse(xml)
-    baseline_assertions(f)
+    baseline_rss_assertions(f)
     assert(f.channel.title == 'OtterNet')
     assert(f.channel.link == 'http://www.otternet.com/')
     assert(f.channel.description == 'Otternet has pages & pages of information about otters.')
@@ -156,7 +156,7 @@ class Tests < Test::Unit::TestCase
     </rss>
     EOF
     f = Syndication::RSS::Parser.new.parse(xml)
-    baseline_assertions(f)
+    baseline_rss_assertions(f)
     for elem in %w(title link description language copyright managingeditor webmaster pubdate lastbuilddate category generator docs cloud ttl textinput rating skiphours skipdays)
       assert_not_nil(f.channel.send(elem), "feed.channel.#{elem} is nil, it shouldn't be")
       assert(f.channel.send(elem).to_s.length > 0)
@@ -232,7 +232,7 @@ class Tests < Test::Unit::TestCase
     </rdf:RDF>
     EOF
     f = Syndication::RSS::Parser.new.parse(xml)
-    baseline_assertions(f)
+    baseline_rss_assertions(f)
     for elem in %w(title link description textinput)
       assert_not_nil(f.channel.send(elem), "feed.channel.#{elem} is nil, it shouldn't be")
       assert(f.channel.send(elem).to_s.length > 0)
@@ -283,7 +283,7 @@ class Tests < Test::Unit::TestCase
     </rdf:RDF>
     EOF
     f = Syndication::RSS::Parser.new.parse(xml)
-    baseline_assertions(f)
+    baseline_rss_assertions(f)
     il = f.items
     assert(il.length == 2)
     i1 = il.first

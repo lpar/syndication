@@ -1,10 +1,8 @@
 # Provides classes for parsing Atom web syndication feeds.
 # See Syndication class for documentation.
 #
-# Copyright © mathew <meta@pobox.com> 2005.
+# Copyright © mathew <meta@pobox.com> 2005-2006.
 # Licensed under the same terms as Ruby.
-#
-# $Header$
 
 require 'uri'
 require 'rexml/parsers/streamparser'
@@ -165,7 +163,7 @@ module Syndication
     # Catch tag end events if we're collecting embedded XHTML.
     def tag_end(endtag, current)
       if @tag == endtag
-        if @type == 'xhtml' and !@div_stripped
+        if @type == 'xhtml' and !defined? @div_stripped
           @xhtml.sub!(/^\s*<div>\s*/m,'')
           @xhtml.sub!(/\s*<\/div>\s*$/m,'')
           @div_stripped = true
@@ -303,7 +301,7 @@ module Syndication
 
     # Add a Syndication::Category value to the feed
     def category=(obj)
-      if !@categories
+      if !defined? @categories
         @categories = Array.new
       end
       @categories.push(obj)
@@ -311,7 +309,7 @@ module Syndication
 
     # Add a Syndication::Entry to the feed
     def entry=(obj)
-      if !@entries
+      if !defined? @entries
         @entries = Array.new
       end
       @entries.push(obj)
@@ -319,7 +317,7 @@ module Syndication
 
     # Add a Syndication::Person contributor to the feed
     def contributor=(obj)
-      if !@contributors
+      if !defined? @contributors
         @contributors = Array.new
       end
       @contributors.push(obj)
@@ -327,7 +325,7 @@ module Syndication
 
     # Add a Syndication::Link to the feed
     def link=(obj)
-      if !@links
+      if !defined? @links
         @links = Array.new
       end
       @links.push(obj)
@@ -386,7 +384,7 @@ module Syndication
 
     # Add a Category object to the entry
     def category=(obj)
-      if !@categories
+      if !defined? @categories
         @categories = Array.new
       end
       @categories.push(obj)
@@ -394,7 +392,7 @@ module Syndication
 
     # Add a Person to the entry to represent a contributor
     def contributor=(obj)
-      if !@contributors
+      if !defined? @contributors
         @contributors = Array.new
       end
       @contributors.push(obj)
@@ -402,7 +400,7 @@ module Syndication
 
     # Add a Link to the entry
     def link=(obj)
-      if !@links
+      if !defined? @links
         @links = Array.new
       end
       @links.push(obj)

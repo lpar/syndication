@@ -1,12 +1,11 @@
 # Copyright © mathew <meta@pobox.com> 2005.
 # Licensed under the same terms as Ruby.
 #
-# $Header$
+# $Header: /var/cvs/syndication/syndication/test/tagsouptest.rb,v 1.2 2005/10/17 20:06:51 meta Exp $
 
 require 'syndication/tagsoup'
 require 'test/unit'
 require 'rexml/document'
-require 'pp'
 
 module Syndication
 
@@ -66,17 +65,17 @@ three&lt;four&#99;&trade;
       @events = Array.new
       REXML::Document.parse_stream(xml, self)
       @rexml = @events
-      puts "REXML\n-----"
-      pp @rexml
-      puts "\nTAGSOUP\n-------"
-      pp @tagsoup
+      #puts "REXML\n-----"
+      #pp @rexml
+      #puts "\nTAGSOUP\n-------"
+      #pp @tagsoup
       errs = false
       for tsevt in @tagsoup
         rxevt = @rexml.shift
         if rxevt
           if tsevt.to_s != rxevt.to_s
             errs = true
-            puts "TagSoup: [#{tsevt}]\nREXML: [#{rxevt}]"
+            #puts "TagSoup: [#{tsevt}]\nREXML: [#{rxevt}]"
           end
         end
       end
