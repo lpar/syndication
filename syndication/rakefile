@@ -36,7 +36,7 @@ spec = Gem::Specification.new do |s|
   end
   s.require_path = "lib"
   s.test_files = ["test/atomtest.rb", "test/rsstest.rb", "test/google.rb",
-                  "test/tagsouptest.rb"]
+                  "test/tagsouptest.rb", "test/feedburntest.rb"]
   s.has_rdoc = true
   s.extra_rdoc_files = ["README", "IMPLEMENTATION", "CHANGES", "DEVELOPER"]
 end

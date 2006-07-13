@@ -7,6 +7,12 @@ module Syndication
   #
   # If you require 'syndication/google' these methods are added to the
   # Syndication::Atom::Entry and Syndication::Atom::Feed classes.
+  #
+  # See http://code.google.com/apis/gdata/calendar.html for more information
+  # on Google Calendar Data APIs.
+  #
+  # See examples/google.rb for a simple example.
+  #
   module Google
     # Where the event is to occur
     attr_reader :gd_where
@@ -26,6 +32,7 @@ module Syndication
       end
     end
 
+    # When the event is to occur, as an Array of [start DateTime, end DateTime].
     def gd_when
       s = e = nil
       if @starttime

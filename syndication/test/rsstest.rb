@@ -117,7 +117,6 @@ class Tests < Test::Unit::TestCase
           <link>http://www.example.com</link>
           <width>42</width>
           <height>23</height>
-          <description>The Example Logo</description>
         </image>
         <rating>(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))</rating>
         <textInput>
@@ -314,6 +313,108 @@ class Tests < Test::Unit::TestCase
     assert(i.itunes_duration == 1201, "Duration computed incorrectly")
     i.itunes_duration = "3:52"
     assert(i.itunes_duration == 232, "Duration computed incorrectly")
+  end
+
+  # Test a well-formed RSS2 feed with every element possible and more than
+  # one item, with all kinds of stuff CDATA escaped.
+  def test_rss2_wf_full_cdata
+    xml = <<-EOF
+    <rss version="2">
+      <channel>
+        <title><![CDATA[Example Feed]]></title>
+        <link>http://www.example.com/</link>
+        <description><![CDATA[This is merely an example.]]></description>
+        <language>en-us</language>
+        <copyright>Copyright 2004 The Example Corporation.</copyright>
+        <managingEditor>editor@example.com</managingEditor>
+        <webMaster>webmaster@example.com</webMaster>
+        <pubDate>Sat, 07 Sep 2002 00:01:02 EDT</pubDate>
+        <lastBuildDate>Sat, 7 Sep 02 13:14:15 -0600</lastBuildDate>
+        <category>examples</category>
+        <category>boring</category>
+        <generator>vim of course</generator>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <cloud domain="rpc.sys.com" port="80" path="/RPC2" registerProcedure="pingMe" protocol="soap"/>
+        <ttl>90</ttl>
+        <image>
+          <title><![CDATA[Example Inc]]></title>
+          <url>http://www.example.com/images/logo.jpg</url>
+          <link>http://www.example.com</link>
+          <width>42</width>
+          <height>23</height>
+        </image>
+        <rating>(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))</rating>
+        <textInput>
+          <title>Submit</title>
+          <description>Enter keywords</description>
+          <name>SearchKeywords</name>
+          <link>http://www.example.com/cgi-bin/search.pl</link>
+        </textInput>
+        <skipHours>
+          <hour>0</hour>
+          <hour>23</hour>
+        </skipHours>
+        <skipDays>
+          <day>Monday</day>
+          <day>Sunday</day>
+        </skipDays>
+        <item>
+          <title>Our stock price shot up</title>
+          <link>http://www.example.com/news/2.html</link>
+          <description>We were hyped in the press!</description>
+        </item>
+        <item>
+          <title><![CDATA[Unencoded < > and & are allowed.]]></title>
+          <link><![CDATA[http://www.example.com/news/1.html]]></link>
+          <description><![CDATA[If this was any less interesting, it would be amazing.]]></description>
+          <author><![CDATA[fred@example.com]]></author>
+          <pubDate>Sat, 07 Sep 2002 00:01:02 EDT</pubDate>
+          <category>dull</category>
+          <category>amazingly</category>
+          <comments>http://www.example.com/news/comments/1.html</comments>
+          <enclosure url="http://www.example.com/mp3/advertisement.mp3" length="123987" type="audio/mpeg" />
+          <guid>4asd98dgf9a74@example.com</guid>
+          <source url="http://www.example.com/news.xml">Example News</source>
+        </item>
+      </channel>
+    </rss>
+    EOF
+    f = Syndication::RSS::Parser.new.parse(xml)
+    baseline_rss_assertions(f)
+    for elem in %w(title link description language copyright managingeditor webmaster pubdate lastbuilddate category generator docs cloud ttl textinput rating skiphours skipdays)
+      assert_not_nil(f.channel.send(elem), "feed.channel.#{elem} is nil, it shouldn't be")
+      assert(f.channel.send(elem).to_s.length > 0)
+    end
+    # Check CDATA is decoded properly
+    assert(f.channel.title == 'Example Feed')
+    assert(f.channel.description == 'This is merely an example.')
+    items = f.items
+    assert(items.length == 2)
+    i = items.last
+    for elem in %w(title link description author pubdate category comments enclosure guid source)
+      assert_not_nil(i.send(elem), "feed.channel.item[1].#{elem} is nil, it shouldn't be")
+    end
+    cats = i.category
+    assert(i.title == 'Unencoded < > and & are allowed.')
+    assert(i.link == 'http://www.example.com/news/1.html')
+    assert(cats.length == 2)
+    assert(cats.first == 'dull')
+    assert(cats.last == 'amazingly')
+    assert(f.channel.skiphours.length == 2)
+    assert(f.channel.skiphours.first == 0)
+    assert(f.channel.skiphours.last == 23)
+    assert(f.channel.pubdate.kind_of?(DateTime))
+    assert(f.channel.lastbuilddate.kind_of?(DateTime))
+    assert(f.channel.pubdate.mday == 7)
+    assert(f.channel.pubdate.month == 9)
+    assert(f.channel.lastbuilddate.mday == 7)
+    assert(f.channel.lastbuilddate.month == 9)
+    c = f.channel
+    assert_not_nil(c)
+    assert_kind_of(Syndication::RSS::Channel, c)
+    assert_not_nil(c.title)
+    assert_not_nil(c.link)
+    assert_not_nil(c.description)
   end
 
 end

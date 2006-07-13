@@ -139,7 +139,8 @@ module Syndication
       'http://purl.org/rss/1.0/modules/content/' => 'content',
       'http://www.itunes.com/DTDs/Podcast-1.0.dtd' => 'itunes',
       'http://www.w3.org/1999/xhtml' => 'xhtml',
-      'http://schemas.google.com/g/2005' => 'gd'
+      'http://schemas.google.com/g/2005' => 'gd',
+      'http://rssnamespace.org/feedburner/ext/1.0' => 'feedburner'
     }
     
     # Create a new AbstractParser. The optional argument consists of text to
@@ -272,11 +273,16 @@ module Syndication
 
     # Supposed to be called when REXML finds a CDATA-encoded piece of text.
     def cdata(s)
-      # We re-encode, because (a) the API for RSS content module provides both 
-      # encoded and decoded results to the user, and (b) REXML doesn't always
-      # seem to pass CDATA via this callback method.
+      # For content_encoded we re-encode, because (a) the API for RSS content 
+      # module provides both encoded and decoded results to the user, and 
+      # (b) REXML doesn't always seem to pass CDATA via this callback method.
+      # For other elements, we keep the text decoded.
       if @textstack.last
-        @textstack.last << "<![CDATA[#{s}]]>"
+        if @tagstack.last == 'content:encoded'
+          @textstack.last << "<![CDATA[#{s}]]>"
+        else
+          @textstack.last << s
+        end
       end
     end
   end
