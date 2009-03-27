@@ -212,6 +212,52 @@ module Syndication
     end
   end
 
+  # XML or text content
+  class Content < Data
+    attr_accessor :xml # The raw XML contents of the content element.
+
+    def initialize(parent, tag = nil, attrs = nil)
+      @xml = ""
+      super
+    end
+
+    def store(tag, obj)
+      puts "[obj:#{tag}]"
+    end
+
+    def tag_start(tag, attrs = nil)
+      puts "[tag:#{tag}]"
+      attrlist = ""
+      if attrs
+        for a in attrs.keys
+          if attrlist != ""
+            attrlist += " "
+          end
+          attrlist += "#{a}=\"#{attrs[a]}\""
+        end
+        @xml += "<#{tag} #{attrlist}>"
+      else
+        @xml += "<#{tag}>"
+      end
+    end
+
+    def tag_end(endtag, current)
+      puts "[endtag:#{endtag}]"
+      puts "[@tag:#{@tag}]"
+      if @tag = endtag
+        return @parent
+      end
+      @xml += "</#{endtag}>"
+      return self
+    end
+
+    def text(s)
+      puts "[text:#{s}]"
+      @xml += s
+    end
+
+  end
+
   # A person, corporation or similar entity within an Atom feed.
   class Person < Container
     attr_accessor :name # Human-readable name of person.
@@ -354,8 +400,6 @@ module Syndication
     attr_accessor :author 
     # Copyright or other rights information.
     attr_accessor :rights 
-    # Content of entry.
-    attr_accessor :content 
     # Globally unique ID of Entry.
     attr_accessor :id 
     # Array of taxonomic categories for feed.
@@ -366,6 +410,8 @@ module Syndication
     attr_reader :contributors 
     # Atom 0.3 creation date/time (obsolete)
     attr_writer :created
+    # Content element as Atom::Content object
+    attr_reader :content
 
     # For Atom 0.3 compatibility
     def modified=(x)
@@ -380,6 +426,11 @@ module Syndication
     # For Atom 0.3 compatibility
     def copyright=(x)
       @rights = x
+    end
+
+    # Add a Content object to the entry
+    def content=(obj)
+      @content = obj
     end
 
     # Add a Category object to the entry
@@ -440,7 +491,8 @@ module Syndication
       'summary' => Data,
       'link' => Link,
       'source' => Feed,
-      'category' => Category
+      'category' => Category,
+      'content' => Content
     }
 
     # Called when REXML finds a text fragment.
