@@ -242,9 +242,7 @@ module Syndication
     end
 
     def tag_end(endtag, current)
-      puts "[endtag:#{endtag}]"
-      puts "[@tag:#{@tag}]"
-      if @tag = endtag
+      if @tag == endtag
         return @parent
       end
       @xml += "</#{endtag}>"
