@@ -222,11 +222,11 @@ module Syndication
     end
 
     def store(tag, obj)
-      puts "[obj:#{tag}]"
+      #puts "[obj:#{tag}]"
     end
 
     def tag_start(tag, attrs = nil)
-      puts "[tag:#{tag}]"
+      #puts "[tag:#{tag}]"
       attrlist = ""
       if attrs
         for a in attrs.keys
@@ -250,7 +250,7 @@ module Syndication
     end
 
     def text(s)
-      puts "[text:#{s}]"
+      #puts "[text:#{s}]"
       @xml += s
     end
 
