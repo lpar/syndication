@@ -259,7 +259,7 @@ class Tests < Test::Unit::TestCase
     <?xml version="1.0"?>
     <rdf:RDF 
       xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-      xmlns:html="http://purl.org/rss/1.0/modules/content/"
+      xmlns:content="http://purl.org/rss/1.0/modules/content/"
       xmlns="http://purl.org/rss/1.0/"> 
     <channel rdf:about="http://www.otternet.com/">
       <title>OtterNet</title>
@@ -271,13 +271,13 @@ class Tests < Test::Unit::TestCase
       <title>The Sea Otter</title>
       <link>http://www.otternet.com/species/seaotter.htm</link>
       <description>The enticingly cute enhydra lontris.</description>
-      <html:encoded>The enticingly cute &lt;i&gt;enhydra lontris&lt;/i&gt;</html:encoded>
+      <content:encoded>The enticingly cute &lt;i&gt;enhydra lontris&lt;/i&gt;</content:encoded>
     </item>
     <item rdf:about="http://www.ruby-lang.org/">
       <title>Ruby</title>
       <link>http://www.ruby-lang.org/</link>
       <description>There's this language called Ruby, you may have heard of it.</description>
-      <html:encoded>There's this language called &lt;strong&gt;Ruby&lt;/strong&gt;, you &lt;em&gt;may&lt;/em&gt; have heard of it.</html:encoded>
+      <content:encoded>There's this language called &lt;strong&gt;Ruby&lt;/strong&gt;, you &lt;em&gt;may&lt;/em&gt; have heard of it.</content:encoded>
     </item>
     </rdf:RDF>
     EOF

@@ -84,7 +84,8 @@ EOF
       f = Syndication::Atom::Parser.new.parse(xml)
       baseline_assertions(f)
       entry = f.entries.first
-      assert(entry.gd_when.to_s == "2006-03-30T22:00:00Z2006-03-30T23:00:00Z")
+      assert entry.gd_when[0].to_s == "2006-03-30T22:00:00+00:00"
+      assert entry.gd_when[1].to_s == "2006-03-30T23:00:00+00:00"
     end
 
   end

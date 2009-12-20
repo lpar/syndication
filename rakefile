@@ -5,7 +5,7 @@ require 'rake/gempackagetask'
 require 'rake/testtask'
 require 'rubygems'
 
-PKG_VERSION = "0.6.1"
+PKG_VERSION = "0.6.2"
 
 desc "Create HTML documentation from RDOC"
 Rake::RDocTask.new do |rd|
@@ -28,6 +28,15 @@ spec = Gem::Specification.new do |s|
   s.email = "meta@pobox.com"
   s.homepage = "http://www.pobox.com/~meta/"
   s.platform = Gem::Platform::RUBY
+  s.description = <<-EOF
+  Syndication is a parser for RSS and Atom feeds. It uses either REXML or
+  its built-in "tag soup" parser for feed parsing. It supports extensions
+  to web feeds including Dublin Core metadata, Apple iTunes podcasts, and 
+  extensions from Google and Feedburner. It is written in pure Ruby, and
+  designed to be easy to understand and extend. It is compatible with Ruby 
+  1.8.x and 1.9.x.
+  EOF
+  s.rubyforge_project = 'syndication'
   s.summary = "A web syndication parser for Atom and RSS with a uniform API"
   candidates = Dir.glob("{bin,docs,lib,test,examples}/**/*")
   candidates << "rakefile"

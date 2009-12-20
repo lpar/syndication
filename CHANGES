@@ -1,6 +1,27 @@
+# == Changes in 0.6.2
+#
+# - Removed unnecessary subdirectory.
+# - Migrated repository to bzr.
+# - Added more examples written to answer e-mails I received.
+# - Fixed rake tests, verified that code passes them using Ruby 1.9.1.
+#
+# == Changes in 0.6.1
+#
+# - Misc bug fix, added #xml to get raw XML from inside feeds.
+# - Made CDATA support work for any element, not just HTML encoded content.
+# - Added feedburner support.
+#
+# == Changes in 0.6
+#
+# - Added some Google Calendar support.
+# - Added Rake unit test task.
+# - Fixed some unit tests.
+# - Fixed handling of XML-style <foo/> closed elements in TagSoup.
+#
 # == Changes in 0.5.1
 #
 # - Fixes for handling of CDATA-encoded text.
+# - Added example for RSS 2.0 with content module.
 #
 # == Changes in 0.5
 #
