@@ -1,228 +1,228 @@
-# = Syndication 0.6 
-#
-# This module provides classes for parsing web syndication feeds in RSS and
-# Atom formats.
-#
-# To parse RSS, use Syndication::RSS::Parser.
-#
-# To parse Atom, use Syndication::Atom::Parser.
-#
-# If you want my advice on which to generate, my order of preference would
-# be:
-#
-# 1. Atom 1.0
-# 2. RSS 1.0
-# 3. RSS 2.0
-#
-# My reasoning is simply that I hate having to sniff for HTML (see 
-# Syndication::RSS).
-#
-# == License
-#
-# Syndication is Copyright 2005-2006 mathew <meta@pobox.com>, and is licensed 
-# under the same terms as Ruby.
-#
-# == Requirements 
-#
-# Built and tested using Ruby 1.8.4. Needs only the standard library.
-#
-# == Rationale 
-#
-# Ruby already has an RSS library as part of the standard library, so you
-# might be wondering why I decided to write another one.
-#
-# I started out trying to document the standard rss module, but found the
-# code rather impenetrable. It was also difficult to see how it could be made
-# documentable via Rdoc.
-#
-# Then I tried writing code to use the standard RSS library, and discovered
-# that it had a number of (what I consider to be) defects:
-#
-# - It doesn't support RSS 2.0 with extensions (such as iTunes podcast feeds),
-#   and it wasn't clear to me how to extend it to do so.
-#
-# - It doesn't support RSS 0.9.
-#
-# - It doesn't support Atom.
-#
-# - The API is different depending on what kind of RSS feed you are parsing.
-#
-# I asked around, and discovered that I wasn't the only person dissatisfied
-# with the RSS library. Since fixing the problems would have resulted in
-# breaking existing code that used the RSS module, I opted for an all-new
-# implementation.
-#
-# This is the result. The first release was version 0.4, which was actually my
-# fourth attempt at putting together a clean, simple, universal API for RSS
-# and Atom parsing. (The first three never saw public release.)
-#
-# == Features 
-#
-# Here are what I see as the key improvements over the rss module in the 
-# Ruby standard library:
-#
-# - Supports all RSS versions, including RSS 0.9, as well as Atom.
-#
-# - Provides a unified API/object model for accessing the decoded data,
-#   with no need to know what format the feed is in.
-#
-# - Allows use of extended RSS 2.0 feeds.
-#
-# - Simple API, fully documented.
-#
-# - Test suite with over 220 test assertions.
-#
-# - Commented source code.
-#
-# - Less source code than the standard library rss module.
-#
-# - Faster than the standard library (at least, in my tests).
-#
-# Other features:
-#
-# - Optional support for RSS 1.0 Dublin Core, Syndication and Content modules,
-#   Apple iTunes Podcast elements, and Google Calendar.
-#
-# - Content module decodes CDATA-escaped or encoded HTML content for you.
-#
-# - Supports namespaces, and encoded XHTML/HTML in Atom feeds.
-#
-# - Dates decoded to Ruby DateTime objects. Note, however, that this is slow,
-#   so parsing is only performed if you ask for the value.
-#
-# - Simple to extend to support your own RSS extensions, uses reflection.
-#
-# - Uses REXML fast stream parsing API for speed, or built-in TagSoup parser
-#   for invalid feeds.
-#
-# - Non-validating, tries to be as forgiving as possible of structural errors.
-#
-# - Remaps namespace prefixes to standard values if it recognizes the module's
-#   URL.
-#
-# In the interests of balance, here are some key disadvantages over the 
-# standard library RSS support:
-#
-# - No support for _generating_ RSS feeds, only for parsing them. If
-#   you're using Rails, you can use RXML; if not, you can use rss/maker.
-#   My feeling is that XML generation isn't a wheel that needs reinventing.
-#
-# - Different API, not a drop-in replacement.
-#
-# - Incomplete support for Atom 0.3 draft. (Anyone still using it?)
-#
-# - No support for base64 data in Atom feeds (yet).
-#
-# - No Japanese documentation.
-#
-# - No XSL output options.
-#
-# - Slower if there are dates in the feed and you ask for their values.
-#
-# == Other options 
-#
-# There are, of course, other Ruby RSS/Atom libraries out there. The ones I
-# know about:
-#
-# = simple-rss 
-#
-# http://rubyforge.org/projects/simple-rss
-#
-# Pros:
-# - Much smaller than syndication or rss.
-#
-# - Completely non-validating.
-#
-# - Backwards compatible with rss in standard library.
-#
-# Cons:
-# - Doesn't use a real XML parser.
-#
-# - No support for namespaces.
-#
-# - Incomplete Atom support (e.g. can't get name and e-mail of <atom:person>
-#   elements as separate fields, you still have to decode XHTML data yourself)
-#
-# - No documentation.
-#
-# For the record, I started work on my library long before simple-rss was
-# announced.
-#
-# = feedtools
-#
-# http://rubyforge.org/projects/feedtools/
-#
-# This one solves most of the same problems as Syndication; however the two 
-# were developed in parallel, in ignorance of each other.
-#
-# Feedtools builds in database caching and persistance, and HTTP fetching.
-# Personally, I don't think those belong in a feed parsing library--they
-# are easily implemented using other standard libraries if you want them.
-#
-# Pros:
-# - Lots of test cases.
-#
-# - Used by lots of Rails people.
-#
-# - Knows about many more namespaces.
-#
-# - Can generate feeds.
-#
-# Cons:
-# - Skimpy documentation.
-#
-# - Uses HTree then XPath parsing, rather than a single stream parse.
-#
-# - Tries to unify RSS and Atom APIs, at the expense of Atom functionality.
-#   (Which could also be a pro, depending on your viewpoint.)
-#
-# == Design philosophy 
-#
-# Here's my design philosophy for this module:
-#
-# - The interface should be via standard Ruby objects and methods; e.g.
-#   feed.channel.item[0].title, rather than (say) a dictionary hash.
-#
-# - It should be easier to parse RSS via the module than to hack something
-#   together using REXML, even if all you want is a list of titles and URLs.
-#
-# - It should be easy to add support for new RSS extensions without needing
-#   to know anything about reflection or other advanced topics. Just define
-#   a mixin with a bunch of appropriately-named methods, and you're done.
-#
-# - The code should be simple to understand.
-#
-# - Even so, good complete documentation is extremely important.
-#
-# - Be lenient in what you accept.
-#
-# - Be conservative in what you generate.
-#
-# - Get well-formed feeds parsing reliably, then worry about broken feeds.
-#
-# - Atom will hopefully be the future. Provide full support for RSS, but don't
-#   hold Atom back by trying to force it into an RSS data model.
-#
-# == Future plans 
-#
-# Here are some possible improvements:
-# 
-# - RSS and Atom generation. Create objects, then call Syndication::FeedMaker
-#   to generate XML in various flavors. This probably won't happen until an XML
-#   generator is picked for the Ruby standard library.
-#
-# - Faster date parsing. It turns out that when I asked for parsed dates in
-#   my test code, the profiler showed Date.parse chewing up 25% of the total
-#   CPU time used. A more specific ISO8601 specific date parser could cut 
-#   that down drastically.
-#
-# - Additional Google Data support. I just wanted to be able to display my
-#   upcoming calendar dates, but clearly there is a lot more that could be
-#   implemented. Unfortunately, recurring events don't seem to have a clean
-#   XML representation in Google's data feeds yet.
-#
-# == Feedback 
-#
-# There are doubtless things I could have done better. Comments, suggestions,
-# etc are welcome; e-mail <meta@pobox.com>.
-#
+= Syndication 0.6 
+
+This module provides classes for parsing web syndication feeds in RSS and
+Atom formats.
+
+To parse RSS, use Syndication::RSS::Parser.
+
+To parse Atom, use Syndication::Atom::Parser.
+
+If you want my advice on which to generate, my order of preference would
+be:
+
+1. Atom 1.0
+2. RSS 1.0
+3. RSS 2.0
+
+My reasoning is simply that I hate having to sniff for HTML (see 
+Syndication::RSS).
+
+== License
+
+Syndication is Copyright 2005-2006 mathew <meta@pobox.com>, and is licensed 
+under the same terms as Ruby.
+
+== Requirements 
+
+Built and tested using Ruby 1.8.4. Needs only the standard library.
+
+== Rationale 
+
+Ruby already has an RSS library as part of the standard library, so you
+might be wondering why I decided to write another one.
+
+I started out trying to document the standard rss module, but found the
+code rather impenetrable. It was also difficult to see how it could be made
+documentable via Rdoc.
+
+Then I tried writing code to use the standard RSS library, and discovered
+that it had a number of (what I consider to be) defects:
+
+- It doesn't support RSS 2.0 with extensions (such as iTunes podcast feeds),
+and it wasn't clear to me how to extend it to do so.
+
+- It doesn't support RSS 0.9.
+
+- It doesn't support Atom.
+
+- The API is different depending on what kind of RSS feed you are parsing.
+
+I asked around, and discovered that I wasn't the only person dissatisfied
+with the RSS library. Since fixing the problems would have resulted in
+breaking existing code that used the RSS module, I opted for an all-new
+implementation.
+
+This is the result. The first release was version 0.4, which was actually my
+fourth attempt at putting together a clean, simple, universal API for RSS
+and Atom parsing. (The first three never saw public release.)
+
+== Features 
+
+Here are what I see as the key improvements over the rss module in the 
+Ruby standard library:
+
+- Supports all RSS versions, including RSS 0.9, as well as Atom.
+
+- Provides a unified API/object model for accessing the decoded data,
+with no need to know what format the feed is in.
+
+- Allows use of extended RSS 2.0 feeds.
+
+- Simple API, fully documented.
+
+- Test suite with over 220 test assertions.
+
+- Commented source code.
+
+- Less source code than the standard library rss module.
+
+- Faster than the standard library (at least, in my tests).
+
+Other features:
+
+- Optional support for RSS 1.0 Dublin Core, Syndication and Content modules,
+Apple iTunes Podcast elements, and Google Calendar.
+
+- Content module decodes CDATA-escaped or encoded HTML content for you.
+
+- Supports namespaces, and encoded XHTML/HTML in Atom feeds.
+
+- Dates decoded to Ruby DateTime objects. Note, however, that this is slow,
+so parsing is only performed if you ask for the value.
+
+- Simple to extend to support your own RSS extensions, uses reflection.
+
+- Uses REXML fast stream parsing API for speed, or built-in TagSoup parser
+for invalid feeds.
+
+- Non-validating, tries to be as forgiving as possible of structural errors.
+
+- Remaps namespace prefixes to standard values if it recognizes the module's
+URL.
+
+In the interests of balance, here are some key disadvantages over the 
+standard library RSS support:
+
+- No support for _generating_ RSS feeds, only for parsing them. If
+you're using Rails, you can use RXML; if not, you can use rss/maker.
+My feeling is that XML generation isn't a wheel that needs reinventing.
+
+- Different API, not a drop-in replacement.
+
+- Incomplete support for Atom 0.3 draft. (Anyone still using it?)
+
+- No support for base64 data in Atom feeds (yet).
+
+- No Japanese documentation.
+
+- No XSL output options.
+
+- Slower if there are dates in the feed and you ask for their values.
+
+== Other options 
+
+There are, of course, other Ruby RSS/Atom libraries out there. The ones I
+know about:
+
+= simple-rss 
+
+http://rubyforge.org/projects/simple-rss
+
+Pros:
+- Much smaller than syndication or rss.
+
+- Completely non-validating.
+
+- Backwards compatible with rss in standard library.
+
+Cons:
+- Doesn't use a real XML parser.
+
+- No support for namespaces.
+
+- Incomplete Atom support (e.g. can't get name and e-mail of <atom:person>
+elements as separate fields, you still have to decode XHTML data yourself)
+
+- No documentation.
+
+For the record, I started work on my library long before simple-rss was
+announced.
+
+= feedtools
+
+http://rubyforge.org/projects/feedtools/
+
+This one solves most of the same problems as Syndication; however the two 
+were developed in parallel, in ignorance of each other.
+
+Feedtools builds in database caching and persistance, and HTTP fetching.
+Personally, I don't think those belong in a feed parsing library--they
+are easily implemented using other standard libraries if you want them.
+
+Pros:
+- Lots of test cases.
+
+- Used by lots of Rails people.
+
+- Knows about many more namespaces.
+
+- Can generate feeds.
+
+Cons:
+- Skimpy documentation.
+
+- Uses HTree then XPath parsing, rather than a single stream parse.
+
+- Tries to unify RSS and Atom APIs, at the expense of Atom functionality.
+(Which could also be a pro, depending on your viewpoint.)
+
+== Design philosophy 
+
+Here's my design philosophy for this module:
+
+- The interface should be via standard Ruby objects and methods; e.g.
+feed.channel.item[0].title, rather than (say) a dictionary hash.
+
+- It should be easier to parse RSS via the module than to hack something
+together using REXML, even if all you want is a list of titles and URLs.
+
+- It should be easy to add support for new RSS extensions without needing
+to know anything about reflection or other advanced topics. Just define
+a mixin with a bunch of appropriately-named methods, and you're done.
+
+- The code should be simple to understand.
+
+- Even so, good complete documentation is extremely important.
+
+- Be lenient in what you accept.
+
+- Be conservative in what you generate.
+
+- Get well-formed feeds parsing reliably, then worry about broken feeds.
+
+- Atom will hopefully be the future. Provide full support for RSS, but don't
+hold Atom back by trying to force it into an RSS data model.
+
+== Future plans 
+
+Here are some possible improvements:
+
+- RSS and Atom generation. Create objects, then call Syndication::FeedMaker
+to generate XML in various flavors. This probably won't happen until an XML
+generator is picked for the Ruby standard library.
+
+- Faster date parsing. It turns out that when I asked for parsed dates in
+my test code, the profiler showed Date.parse chewing up 25% of the total
+CPU time used. A more specific ISO8601 specific date parser could cut 
+that down drastically.
+
+- Additional Google Data support. I just wanted to be able to display my
+upcoming calendar dates, but clearly there is a lot more that could be
+implemented. Unfortunately, recurring events don't seem to have a clean
+XML representation in Google's data feeds yet.
+
+== Feedback 
+
+There are doubtless things I could have done better. Comments, suggestions,
+etc are welcome; e-mail <meta@pobox.com>.
+
