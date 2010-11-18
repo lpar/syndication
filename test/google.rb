@@ -1,4 +1,5 @@
-# Copyright © mathew <meta@pobox.com> 2005.
+# Encoding: UTF-8
+# Copyright © mathew <meta@pobox.com> 2005,2010.
 # Licensed under the same terms as Ruby.
 
 require 'syndication/atom'

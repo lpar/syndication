@@ -45,7 +45,7 @@ module Syndication
     def tag_start(tag, attrs = nil)
       method = tag2method(tag)
       if self.respond_to?(method)
-        if attrs
+        if attrs and !attrs.empty?
           self.send(method, attrs)
         end
         @current_method = method
