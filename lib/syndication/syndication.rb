@@ -7,6 +7,8 @@ require 'date'
 
 module Syndication
 
+  VERSION = "0.6.4"
+
   # Mixin for RSS 1.0 syndication data (draft standard for RSS 1.0).
   #
   # If you require 'syndication/syndication' these methods are added to the
