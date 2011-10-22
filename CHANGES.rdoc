@@ -1,3 +1,7 @@
+# == Changes in 0.6.4
+#
+# OK, I give in. Everyone else is doing it, so I'm moving to GitHub.
+#
 # == Changes in 0.6.2
 #
 # - Removed unnecessary subdirectory.

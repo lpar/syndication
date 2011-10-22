@@ -19,12 +19,12 @@ Syndication::RSS).
 
 == License
 
-Syndication is Copyright 2005-2006 mathew <meta@pobox.com>, and is licensed 
+Syndication is Copyright 2005-2011 mathew <meta@pobox.com>, and is licensed 
 under the same terms as Ruby.
 
 == Requirements 
 
-Built and tested using Ruby 1.8.4. Needs only the standard library.
+Built and tested using Ruby 1.9.2. Needs only the standard library.
 
 == Rationale 
 
@@ -38,12 +38,12 @@ documentable via Rdoc.
 Then I tried writing code to use the standard RSS library, and discovered
 that it had a number of (what I consider to be) defects:
 
-- It doesn't support RSS 2.0 with extensions (such as iTunes podcast feeds),
-and it wasn't clear to me how to extend it to do so.
+- It didn't support RSS 2.0 with extensions (such as iTunes podcast feeds),
+  and it wasn't clear to me how to extend it to do so.
 
-- It doesn't support RSS 0.9.
+- It didn't support RSS 0.9.
 
-- It doesn't support Atom.
+- It didn't support Atom.
 
 - The API is different depending on what kind of RSS feed you are parsing.
 
@@ -64,7 +64,7 @@ Ruby standard library:
 - Supports all RSS versions, including RSS 0.9, as well as Atom.
 
 - Provides a unified API/object model for accessing the decoded data,
-with no need to know what format the feed is in.
+  with no need to know what format the feed is in.
 
 - Allows use of extended RSS 2.0 feeds.
 
@@ -81,31 +81,31 @@ with no need to know what format the feed is in.
 Other features:
 
 - Optional support for RSS 1.0 Dublin Core, Syndication and Content modules,
-Apple iTunes Podcast elements, and Google Calendar.
+  Apple iTunes Podcast elements, and Google Calendar.
 
 - Content module decodes CDATA-escaped or encoded HTML content for you.
 
 - Supports namespaces, and encoded XHTML/HTML in Atom feeds.
 
 - Dates decoded to Ruby DateTime objects. Note, however, that this is slow,
-so parsing is only performed if you ask for the value.
+  so parsing is only performed if you ask for the value.
 
 - Simple to extend to support your own RSS extensions, uses reflection.
 
 - Uses REXML fast stream parsing API for speed, or built-in TagSoup parser
-for invalid feeds.
+  for invalid feeds.
 
 - Non-validating, tries to be as forgiving as possible of structural errors.
 
 - Remaps namespace prefixes to standard values if it recognizes the module's
-URL.
+  URL.
 
 In the interests of balance, here are some key disadvantages over the 
 standard library RSS support:
 
 - No support for _generating_ RSS feeds, only for parsing them. If
-you're using Rails, you can use RXML; if not, you can use rss/maker.
-My feeling is that XML generation isn't a wheel that needs reinventing.
+  you're using Rails, you can use RXML; if not, you can use rss/maker.
+  My feeling is that XML generation isn't a wheel that needs reinventing.
 
 - Different API, not a drop-in replacement.
 
@@ -207,19 +207,23 @@ hold Atom back by trying to force it into an RSS data model.
 
 Here are some possible improvements:
 
-- RSS and Atom generation. Create objects, then call Syndication::FeedMaker
-to generate XML in various flavors. This probably won't happen until an XML
-generator is picked for the Ruby standard library.
+- RSS and Atom generation. 
 
-- Faster date parsing. It turns out that when I asked for parsed dates in
-my test code, the profiler showed Date.parse chewing up 25% of the total
-CPU time used. A more specific ISO8601 specific date parser could cut 
-that down drastically.
+Create objects, then call Syndication::FeedMaker to generate XML in various
+flavors. This probably won't happen until an XML generator is picked for the
+Ruby standard library.
 
-- Additional Google Data support. I just wanted to be able to display my
-upcoming calendar dates, but clearly there is a lot more that could be
-implemented. Unfortunately, recurring events don't seem to have a clean
-XML representation in Google's data feeds yet.
+- Faster date parsing. 
+
+It turns out that when I asked for parsed dates in my test code, the profiler
+showed Date.parse chewing up 25% of the total CPU time used. A more specific
+ISO8601 specific date parser could cut that down drastically.
+
+- Additional Google Data support. 
+
+I just wanted to be able to display my upcoming calendar dates, but clearly
+there is a lot more that could be implemented. Unfortunately, recurring events
+don't seem to have a clean XML representation in Google's data feeds yet.
 
 == Feedback 
 
