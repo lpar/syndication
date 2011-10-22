@@ -1,9 +1,7 @@
 # The file common.rb contains code common to both Atom and RSS parsing.
 #
-# Copyright © mathew <meta@pobox.com> 2006.
+# Copyright Â© mathew <meta@pobox.com> 2006.
 # Licensed under the same terms as Ruby.
-#
-# $Header: /var/cvs/syndication/syndication/lib/syndication/common.rb,v 1.4 2005/10/23 22:51:17 meta Exp $
 
 require 'uri'
 require 'rexml/parsers/streamparser'

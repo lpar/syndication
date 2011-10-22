@@ -1,7 +1,7 @@
 # Provides classes for parsing Atom web syndication feeds.
 # See Syndication class for documentation.
 #
-# Copyright © mathew <meta@pobox.com> 2005-2006.
+# Copyright Â© mathew <meta@pobox.com> 2005-2006.
 # Licensed under the same terms as Ruby.
 
 require 'uri'

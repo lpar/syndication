@@ -10,7 +10,7 @@ spec = Gem::Specification.new do |s|
   s.version = Syndication::VERSION
   s.author = "mathew"
   s.email = "meta@pobox.com"
-  s.homepage = "https://launchpad.net/ruby-syndication"
+  s.homepage = "https://github.com/lpar/syndication"
   s.platform = Gem::Platform::RUBY
   s.description = <<-EOF
   Syndication is a parser for RSS and Atom feeds. It uses either REXML or
@@ -31,5 +31,5 @@ spec = Gem::Specification.new do |s|
   s.test_files = ["test/atomtest.rb", "test/rsstest.rb", "test/google.rb",
                   "test/tagsouptest.rb", "test/feedburntest.rb"]
   s.has_rdoc = true
-  s.extra_rdoc_files = ["README", "IMPLEMENTATION", "CHANGES", "DEVELOPER"]
+  s.extra_rdoc_files = ["README.rdoc", "IMPLEMENTATION.rdoc", "CHANGES.rdoc", "DEVELOPER.rdoc"]
 end

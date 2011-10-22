@@ -1,4 +1,4 @@
-# Copyright © mathew <meta@pobox.com> 2006.
+# Copyright Â© mathew <meta@pobox.com> 2006.
 # Licensed under the same terms as Ruby.
 
 module Syndication
